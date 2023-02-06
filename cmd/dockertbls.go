@@ -70,7 +70,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("finsihed run tbls")
+	fmt.Println("finished run tbls")
 
 	// You can't defer this because os.Exit doesn't care for defer
 	if err := pool.Purge(resource); err != nil {
@@ -169,7 +169,6 @@ func migrateDB(db dockertbls.Database, migrationDir string) error {
 		return err
 	}
 
-	fmt.Println("finish migration")
 	if err = mgr.Up(); err != nil {
 		return err
 	}
