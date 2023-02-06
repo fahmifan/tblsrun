@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS example (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS example_2 (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    example_1_id INT NOT NULL REFERENCES example(id)
+);
