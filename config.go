@@ -5,7 +5,6 @@ import (
 
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
-	"github.com/pkg/errors"
 )
 
 type Database struct {
@@ -37,7 +36,7 @@ func NewConfig(env string) (Config, error) {
 
 	var config Config
 	if err := envdecode.Decode(&config); err != nil {
-		return Config{}, errors.Wrap(err, "[NewConfig] error decoding env")
+		return Config{}, err
 	}
 
 	return config, nil
