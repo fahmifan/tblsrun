@@ -147,6 +147,7 @@ func initDB(pool *dockertest.Pool, cfg *dockertbls.Config) (resource *dockertest
 	}
 
 	if cfg.Database.Schema != defaultSchema {
+		fmt.Println("creating schema")
 		if err = createSchema(db, cfg.Database.Schema); err != nil {
 			return nil, err
 		}
