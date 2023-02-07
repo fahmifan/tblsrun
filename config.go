@@ -8,8 +8,8 @@ import (
 )
 
 type Database struct {
-	Name     string `env:"DATABASE_NAME"`
-	Schema   string `env:"DATABASE_SCHEMA"`
+	Name     string `env:"TBLS_DATABASE_NAME"`
+	Schema   string `env:"TBLS_DATABASE_SCHEMA"`
 	Username string
 	Password string
 	Host     string
@@ -22,7 +22,7 @@ func (db Database) DSN() string {
 
 type Config struct {
 	Database     Database
-	MigrationDir string `env:"MIGRATION_DIR"`
+	MigrationDir string `env:"TBLS_MIGRATION_DIR"`
 	TblsCfgFile  string `env:"TBLS_CONFIG_FILE,default=.tbls.yml"`
 }
 
