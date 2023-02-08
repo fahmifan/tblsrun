@@ -2,6 +2,7 @@ package dockertbls
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
@@ -18,6 +19,11 @@ type Database struct {
 
 func (db Database) DSN() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", db.Username, db.Password, db.Host, db.Port, db.Name, db.Schema)
+}
+
+func (db Database) GetPort() uint32 {
+	u, _ := strconv.ParseUint(db.Port, 10, 32)
+	return uint32(u)
 }
 
 type Config struct {
