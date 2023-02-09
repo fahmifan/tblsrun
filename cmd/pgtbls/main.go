@@ -9,7 +9,7 @@ import (
 	"time"
 
 	_ "github.com/davecgh/go-spew/spew"
-	"github.com/fahmifan/dockertbls"
+	dockertbls "github.com/fahmifan/tblsrun"
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"

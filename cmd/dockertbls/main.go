@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/fahmifan/dockertbls"
+	dockertbls "github.com/fahmifan/tblsrun"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"

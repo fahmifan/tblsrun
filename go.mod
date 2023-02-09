@@ -1,4 +1,4 @@
-module github.com/fahmifan/dockertbls
+module github.com/fahmifan/tblsrun
 
 go 1.19
 
