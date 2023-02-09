@@ -21,6 +21,14 @@ func (db Database) DSN() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", db.Username, db.Password, db.Host, db.Port, db.Name, db.Schema)
 }
 
+func (db Database) DSNDefaultDBName() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/postgres?sslmode=disable", db.Username, db.Password, db.Host, db.Port)
+}
+
+func (db Database) QuotedName() string {
+	return "`" + db.Name + "`"
+}
+
 func (db Database) GetPort() uint32 {
 	u, _ := strconv.ParseUint(db.Port, 10, 32)
 	return uint32(u)

@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
+	_ "github.com/davecgh/go-spew/spew"
 	"github.com/fahmifan/dockertbls"
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
 	"github.com/golang-migrate/migrate/v4"
@@ -24,7 +26,10 @@ func main() {
 	}
 }
 
-const defaultSchema = "public"
+const (
+	defaultSchema = "public"
+	defaultDB     = "postgres"
+)
 
 func run() error {
 	cfg, err := dockertbls.NewConfig(".env")
@@ -32,7 +37,6 @@ func run() error {
 		return err
 	}
 
-	cfg.Database.Name = "postgres"
 	cfg.Database.Username = "postgres"
 	cfg.Database.Password = "postgres"
 	cfg.Database.Host = "localhost"
@@ -41,7 +45,7 @@ func run() error {
 	pg := embeddedpostgres.NewDatabase(embeddedpostgres.DefaultConfig().
 		Version(embeddedpostgres.V13).
 		Port(cfg.Database.GetPort()).
-		Database(cfg.Database.Name).
+		Database(defaultDB).
 		Password(cfg.Database.Password).
 		Username(cfg.Database.Username),
 	)
@@ -50,11 +54,12 @@ func run() error {
 	}
 	defer logIfErr(pg.Stop)
 
-	time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 1)
 	if err = initDB(cfg); err != nil {
 		return err
 	}
 
+	spew.Dump(cfg.Database.DSN())
 	fmt.Println("run tbls")
 	out, err := generateDoc(cfg.Database, cfg.TblsCfgFile)
 	fmt.Println(out) // print std out & stderr
@@ -74,13 +79,31 @@ func generateDoc(dbCfg dockertbls.Database, tblCfgFile string) (string, error) {
 }
 
 func initDB(cfg dockertbls.Config) error {
-	db, err := openDB(cfg)
+	db, err := openDB(cfg.Database.DSNDefaultDBName())
 	if err != nil {
 		return err
 	}
 	defer logIfErr(db.Close)
 
+	isDefaultDB := cfg.Database.Name == defaultDB
+	if !isDefaultDB {
+		fmt.Println("creating database: ", cfg.Database.Name)
+		if err = createDB(db, cfg.Database.Name); err != nil {
+			return err
+		}
+	}
+
 	if cfg.Database.Schema != defaultSchema {
+		if !isDefaultDB {
+			logIfErr(db.Close)
+
+			db, err = openDB(cfg.Database.DSN())
+			if err != nil {
+				return err
+			}
+		}
+
+		fmt.Println("creating schema: ", cfg.Database.Schema)
 		if err = createSchema(db, cfg.Database.Schema); err != nil {
 			return err
 		}
@@ -93,8 +116,8 @@ func initDB(cfg dockertbls.Config) error {
 	return nil
 }
 
-func openDB(cfg dockertbls.Config) (*sql.DB, error) {
-	gormDB, err := gorm.Open(postgres.Open(cfg.Database.DSN()), &gorm.Config{})
+func openDB(dsn string) (*sql.DB, error) {
+	gormDB, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
@@ -102,9 +125,16 @@ func openDB(cfg dockertbls.Config) (*sql.DB, error) {
 	return gormDB.DB()
 }
 
+func createDB(db *sql.DB, dbName string) (err error) {
+	if _, err = db.Exec(`CREATE DATABASE "` + dbName + `";`); err != nil {
+		return err
+	}
+	return nil
+}
+
 func createSchema(db *sql.DB, schema string) (err error) {
 	// create & set the real schema
-	if _, err = db.Exec(`CREATE SCHEMA ` + schema + `;`); err != nil {
+	if _, err = db.Exec(`CREATE SCHEMA "` + schema + `";`); err != nil {
 		return err
 	}
 	return nil

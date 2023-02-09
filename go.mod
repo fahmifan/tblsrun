@@ -3,6 +3,7 @@ module github.com/fahmifan/dockertbls
 go 1.19
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/fergusstrange/embedded-postgres v1.20.0
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd
