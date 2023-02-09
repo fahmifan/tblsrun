@@ -3,11 +3,11 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	_ "github.com/davecgh/go-spew/spew"
 	"github.com/fahmifan/dockertbls"
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
@@ -47,7 +47,8 @@ func run() error {
 		Port(cfg.Database.GetPort()).
 		Database(defaultDB).
 		Password(cfg.Database.Password).
-		Username(cfg.Database.Username),
+		Username(cfg.Database.Username).
+		Logger(io.Discard),
 	)
 	if err = pg.Start(); err != nil {
 		return err
@@ -59,7 +60,6 @@ func run() error {
 		return err
 	}
 
-	spew.Dump(cfg.Database.DSN())
 	fmt.Println("run tbls")
 	out, err := generateDoc(cfg.Database, cfg.TblsCfgFile)
 	fmt.Println(out) // print std out & stderr
