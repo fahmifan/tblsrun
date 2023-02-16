@@ -59,13 +59,13 @@ func run() error {
 	fmt.Println("success init DB")
 
 	fmt.Println("run migration")
-	if err = migrateDB(cfg.Database, cfg.MigrationDir); err != nil {
+	if err = migrateDB(cfg.Database, cfg.TBLS.MigrationDir); err != nil {
 		return err
 	}
 	fmt.Println("finish migration")
 
 	fmt.Println("run tbls")
-	out, err := generateDoc(cfg.Database, cfg.TblsCfgFile)
+	out, err := generateDoc(cfg.Database, cfg.TBLS.CfgFile)
 	fmt.Println(out) // print std out & stderr
 	if err != nil {
 		return err
