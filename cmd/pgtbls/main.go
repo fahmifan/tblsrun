@@ -9,7 +9,7 @@ import (
 	"time"
 
 	_ "github.com/davecgh/go-spew/spew"
-	dockertbls "github.com/fahmifan/tblsrun"
+	"github.com/fahmifan/tblsrun"
 	embeddedpostgres "github.com/fergusstrange/embedded-postgres"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
@@ -32,7 +32,7 @@ const (
 )
 
 func run() error {
-	cfg, err := dockertbls.NewConfig(".env")
+	cfg, err := tblsrun.NewConfig(".env")
 	if err != nil {
 		return err
 	}
@@ -61,7 +61,7 @@ func run() error {
 	}
 
 	fmt.Println("run tbls")
-	out, err := generateDoc(cfg.Database, cfg.TblsCfgFile)
+	out, err := generateDoc(cfg.Database, cfg.TBLS.CfgFile)
 	fmt.Println(out) // print std out & stderr
 	if err != nil {
 		return err
@@ -71,14 +71,14 @@ func run() error {
 	return nil
 }
 
-func generateDoc(dbCfg dockertbls.Database, tblCfgFile string) (string, error) {
+func generateDoc(dbCfg tblsrun.Database, tblCfgFile string) (string, error) {
 	//nolint:gosec
 	cmd := exec.Command("tbls", "doc", dbCfg.DSN(), "--force", "--config="+tblCfgFile)
 	out, err := cmd.CombinedOutput()
 	return string(out), err
 }
 
-func initDB(cfg dockertbls.Config) error {
+func initDB(cfg tblsrun.Config) error {
 	db, err := openDB(cfg.Database.DSNDefaultDBName())
 	if err != nil {
 		return err
@@ -109,7 +109,7 @@ func initDB(cfg dockertbls.Config) error {
 		}
 	}
 
-	if err = migrateDB(cfg.Database, cfg.MigrationDir); err != nil {
+	if err = migrateDB(cfg.Database, cfg.TBLS.MigrationDir); err != nil {
 		return err
 	}
 
@@ -140,7 +140,7 @@ func createSchema(db *sql.DB, schema string) (err error) {
 	return nil
 }
 
-func migrateDB(db dockertbls.Database, migrationDir string) error {
+func migrateDB(db tblsrun.Database, migrationDir string) error {
 	mgr, err := migrate.New("file://"+migrationDir, db.DSN())
 	if err != nil {
 		return err

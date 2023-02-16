@@ -8,7 +8,7 @@ import (
 	"os/exec"
 	"time"
 
-	dockertbls "github.com/fahmifan/tblsrun"
+	"github.com/fahmifan/tblsrun"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -31,7 +31,7 @@ const (
 )
 
 func run() error {
-	cfg, err := dockertbls.NewConfig(".env")
+	cfg, err := tblsrun.NewConfig(".env")
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func installTblsIfNotExists() (path string, err error) {
 	return path, nil
 }
 
-func initDB(pool *dockertest.Pool, cfg *dockertbls.Config) (resource *dockertest.Resource, err error) {
+func initDB(pool *dockertest.Pool, cfg *tblsrun.Config) (resource *dockertest.Resource, err error) {
 	fmt.Println("run postgres in docker")
 
 	// set db config
@@ -164,7 +164,7 @@ func createSchema(db *sql.DB, schema string) (err error) {
 	return nil
 }
 
-func migrateDB(db dockertbls.Database, migrationDir string) error {
+func migrateDB(db tblsrun.Database, migrationDir string) error {
 	mgr, err := migrate.New("file://"+migrationDir, db.DSN())
 	if err != nil {
 		return err
@@ -177,7 +177,7 @@ func migrateDB(db dockertbls.Database, migrationDir string) error {
 	return nil
 }
 
-func generateDoc(dbCfg dockertbls.Database, tblCfgFile string) (string, error) {
+func generateDoc(dbCfg tblsrun.Database, tblCfgFile string) (string, error) {
 	//nolint:gosec
 	cmd := exec.Command("tbls", "doc", dbCfg.DSN(), "--force", "--config="+tblCfgFile)
 	out, err := cmd.CombinedOutput()
