@@ -1,4 +1,4 @@
-# dockertbls
+# tblsrun
 
 Generate database documentation from migration files. Uses [tbls](github.com/k1LoW/tbls) internally to generate the docs.
 Useful for reviewing database schema change in your team.
