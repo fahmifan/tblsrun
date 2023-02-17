@@ -2,6 +2,8 @@ package dbtool
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,4 +31,10 @@ func CreateSchemaIfNoExist(db *sql.DB, schema string) (err error) {
 		return err
 	}
 	return nil
+}
+
+func WrapClose(closer func() error) {
+	if err := closer(); err != nil {
+		fmt.Fprint(os.Stderr, "error: ", err)
+	}
 }
