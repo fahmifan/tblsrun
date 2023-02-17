@@ -29,7 +29,8 @@ func run(args []string) (err error) {
 	}
 
 	cmd := &cobra.Command{
-		Use: "tblsrun",
+		Use:   "tblsrun",
+		Short: "Generate database documentation from migration files",
 	}
 
 	cmd.SetArgs(args[1:])
@@ -40,7 +41,8 @@ func run(args []string) (err error) {
 
 func cmdPostgres() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "postgres",
+		Use:   "postgres",
+		Short: "Run tbls with postgres",
 	}
 	cmd.AddCommand(cmdPostgresDocker(), cmdPostgresEmbedded())
 	return cmd
@@ -48,7 +50,8 @@ func cmdPostgres() *cobra.Command {
 
 func cmdPostgresDocker() *cobra.Command {
 	return &cobra.Command{
-		Use: "docker",
+		Use:   "docker",
+		Short: "Run tbls with postgres in docker",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runner.
 				NewRunner(
@@ -63,7 +66,8 @@ func cmdPostgresDocker() *cobra.Command {
 
 func cmdPostgresEmbedded() *cobra.Command {
 	return &cobra.Command{
-		Use: "embedded",
+		Use:   "embedded",
+		Short: "Run tbls with embedded postgres",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runner.
 				NewRunner(
