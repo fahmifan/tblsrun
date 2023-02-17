@@ -16,6 +16,11 @@ Here is the example database documentation [link](/example/dbdoc/README.md)
 
 ![db documentation snipped](doc/dbdoc-snippet.png)
 
+## Installation
+```
+go install github.com/fahmifan/tblsrun/cmd/tblsrun@latest
+```
+
 ## How To Use
 - Set env variables, you can use `.env.example` as a reference.
 - Create tbls config (see `example.tbls.yml`)
