@@ -42,6 +42,13 @@ func (r *Runner) Run() error {
 }
 
 func (r *Runner) run() error {
+	defer func() {
+		panicMsg := recover()
+		if panicMsg != nil {
+			fmt.Println(panicMsg)
+		}
+	}()
+
 	if _, err := installTblsIfNotExists(); err != nil {
 		return err
 	}

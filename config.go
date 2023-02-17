@@ -29,8 +29,8 @@ func (d Database) WithDBName(dbName string) Database {
 
 type TBLS struct {
 	DBName       string `env:"TBLS_DATABASE_NAME"`
+	DBPort       string `env:"TBLS_DATABASE_PORT,default=5432"`
 	Schema       string `env:"TBLS_DATABASE_SCHEMA"`
-	Port         string `env:"TBLS_DATABASE_PORT"`
 	MigrationDir string `env:"TBLS_MIGRATION_DIR"`
 	CfgFile      string `env:"TBLS_CONFIG_FILE,default=.tbls.yml"`
 }

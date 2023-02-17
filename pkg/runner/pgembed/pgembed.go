@@ -47,7 +47,7 @@ func (p *PostgresEmbedded) Init() error {
 		Username: "postgres",
 		Password: "postgres",
 		Host:     "localhost",
-		Port:     "5432",
+		Port:     p.cfg.TBLS.DBPort,
 	}
 
 	p.pg = embeddedpostgres.NewDatabase(embeddedpostgres.DefaultConfig().
