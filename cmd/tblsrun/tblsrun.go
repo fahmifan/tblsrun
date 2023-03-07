@@ -20,22 +20,22 @@ func main() {
 	}
 }
 
-var cfg tblsrun.Config
+var (
+	envFile string
+)
+
+const defaultEnvFile = ".env"
 
 func run(args []string) (err error) {
-	cfg, err = tblsrun.NewConfig(".env")
-	if err != nil {
-		return fmt.Errorf("new config: %w", err)
-	}
-
 	cmd := &cobra.Command{
 		Use:   "tblsrun",
 		Short: "Generate database documentation from migration files",
 	}
 
 	cmd.SetArgs(args[1:])
-	cmd.AddCommand(cmdPostgres())
+	cmd.PersistentFlags().StringVar(&envFile, "env-file", defaultEnvFile, `--env-file="custom.env"`)
 
+	cmd.AddCommand(cmdPostgres())
 	return cmd.Execute()
 }
 
@@ -53,6 +53,11 @@ func cmdPostgresDocker() *cobra.Command {
 		Use:   "docker",
 		Short: "Run tbls with postgres in docker",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg, err := tblsrun.NewConfig(envFile)
+			if err != nil {
+				return fmt.Errorf("new config: %w", err)
+			}
+
 			return runner.
 				NewRunner(
 					cfg,
@@ -69,6 +74,11 @@ func cmdPostgresEmbedded() *cobra.Command {
 		Use:   "embedded",
 		Short: "Run tbls with embedded postgres",
 		RunE: func(cmd *cobra.Command, args []string) error {
+			cfg, err := tblsrun.NewConfig(envFile)
+			if err != nil {
+				return fmt.Errorf("new config: %w", err)
+			}
+
 			return runner.
 				NewRunner(
 					cfg,

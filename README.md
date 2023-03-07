@@ -55,5 +55,9 @@ Available Commands:
   postgres    Run tbls with postgres
 
 Flags:
+      --env-file string   --env-file="custom.env" (default ".env")
   -h, --help   help for tblsrun
 ```
+
+## Testing
+To do manual test we can run `make dbdoc` and check there should be 2 output

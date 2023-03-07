@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
+	_ "github.com/davecgh/go-spew/spew"
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
 )
