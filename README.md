@@ -57,3 +57,6 @@ Available Commands:
 Flags:
   -h, --help   help for tblsrun
 ```
+
+## Testing
+To do manual test we can run `make dbdoc` and check there should be 2 output
