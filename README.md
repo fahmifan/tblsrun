@@ -55,6 +55,7 @@ Available Commands:
   postgres    Run tbls with postgres
 
 Flags:
+      --env-file string   --env-file="custom.env" (default ".env")
   -h, --help   help for tblsrun
 ```
 
