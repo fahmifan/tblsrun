@@ -41,6 +41,12 @@ func (pd *PostgresDocker) DSN() string {
 		DSN()
 }
 
+func (pd *PostgresDocker) DSNWithoutSchema() string {
+	return pd.dbCfg.
+		WithDBName(pd.cfg.TBLS.DBName).
+		DSNWithoutSchema()
+}
+
 func (pd *PostgresDocker) WithSchema(schema string) runner.DbDriver {
 	newP := *pd
 

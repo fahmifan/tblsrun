@@ -38,6 +38,12 @@ func (p *PostgresEmbedded) DSN() string {
 		DSN()
 }
 
+func (p *PostgresEmbedded) DSNWithoutSchema() string {
+	return p.dbCfg.
+		WithDBName(p.cfg.TBLS.DBName).
+		DSNWithoutSchema()
+}
+
 func (p *PostgresEmbedded) WithSchema(schema string) runner.DbDriver {
 	newP := *p
 

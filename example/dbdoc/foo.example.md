@@ -14,7 +14,7 @@
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| example_example_schema_id_fkey | FOREIGN KEY | FOREIGN KEY (example_schema_id) REFERENCES example(id) |
+| example_example_schema_id_fkey | FOREIGN KEY | FOREIGN KEY (example_schema_id) REFERENCES bar.example(id) |
 | example_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes

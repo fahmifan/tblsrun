@@ -16,6 +16,7 @@ type DbDriver interface {
 	CreateSchema() error
 	CreateSchemas() error
 	DSN() string
+	DSNWithoutSchema() string
 	Stop() error
 	WithSchema(schema string) DbDriver
 }
@@ -71,7 +72,6 @@ func (r *Runner) run() error {
 
 	schemas := r.cfg.TBLS.GetSchemas()
 	migrationDirs := r.cfg.TBLS.GetMigrationDirs()
-	cfgFiles := r.cfg.TBLS.GetConfigFiles()
 
 	if len(schemas) != len(migrationDirs) {
 		return errors.New("migration dir and schema length must be equal")
@@ -86,7 +86,6 @@ func (r *Runner) run() error {
 	for i := 0; i < len(migrationDirs); i++ {
 		configPairs[i].Schema = schemas[i]
 		configPairs[i].MigrationDir = migrationDirs[i]
-		configPairs[i].CfgFile = cfgFiles[i]
 	}
 
 	for _, pair := range configPairs {
@@ -96,12 +95,12 @@ func (r *Runner) run() error {
 		}
 	}
 
-	for _, cfgPair := range configPairs {
-		dsn := r.dbDriver.WithSchema(cfgPair.Schema).DSN()
-		if err := generateDoc(dsn, cfgPair.CfgFile, os.Stdout); err != nil {
-			return fmt.Errorf("generate doc: %w", err)
-		}
+	dsn := r.dbDriver.DSNWithoutSchema()
+	if err := generateDoc(dsn, r.cfg.TBLS.CfgFile, os.Stdout); err != nil {
+		return fmt.Errorf("generate doc: %w", err)
 	}
+	// for _, cfgPair := range configPairs {
+	// }
 
 	return nil
 }

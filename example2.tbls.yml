@@ -1,4 +1,0 @@
-# Path to generate document
-docPath: example2/dbdoc/
-relations:
-  - table: example

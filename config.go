@@ -56,6 +56,10 @@ func (db Database) DSN() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", db.Username, db.Password, db.Host, db.Port, db.Name, db.Schema)
 }
 
+func (db Database) DSNWithoutSchema() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", db.Username, db.Password, db.Host, db.Port, db.Name)
+}
+
 // Deprecated: use DSN instead
 func (db Database) DSNDefaultDBName() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%s/postgres?sslmode=disable", db.Username, db.Password, db.Host, db.Port)

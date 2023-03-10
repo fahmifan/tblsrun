@@ -6,7 +6,7 @@
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | integer | nextval('example_2_id_seq'::regclass) | false |  |  |  |
+| id | integer | nextval('bar.example_2_id_seq'::regclass) | false |  |  |  |
 | name | varchar(255) |  | false |  |  |  |
 | example_1_id | integer |  | false |  | [bar.example](bar.example.md) |  |
 
@@ -14,7 +14,7 @@
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| example_2_example_1_id_fkey | FOREIGN KEY | FOREIGN KEY (example_1_id) REFERENCES example(id) |
+| example_2_example_1_id_fkey | FOREIGN KEY | FOREIGN KEY (example_1_id) REFERENCES bar.example(id) |
 | example_2_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
