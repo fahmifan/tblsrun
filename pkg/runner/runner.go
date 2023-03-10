@@ -80,7 +80,6 @@ func (r *Runner) run() error {
 	configPairs := make([]struct {
 		Schema       string
 		MigrationDir string
-		CfgFile      string
 	}, len(migrationDirs))
 
 	for i := 0; i < len(migrationDirs); i++ {
