@@ -38,6 +38,13 @@ func (p *PostgresEmbedded) DSN() string {
 		DSN()
 }
 
+func (p *PostgresEmbedded) WithSchema(schema string) runner.DbDriver {
+	newP := *p
+
+	newP.cfg.TBLS.Schema = schema
+	return &newP
+}
+
 func (p *PostgresEmbedded) Stop() error {
 	return p.pg.Stop()
 }
@@ -101,6 +108,28 @@ func (p *PostgresEmbedded) CreateSchema() error {
 
 	if err = dbtool.CreateSchemaIfNoExist(db, p.cfg.TBLS.Schema); err != nil {
 		return fmt.Errorf("create schema: %w", err)
+	}
+
+	return nil
+}
+
+func (p *PostgresEmbedded) CreateSchemas() error {
+	dsn := p.dbCfg.DSN()
+	if !p.isDefaultDB() {
+		dsn = p.dbCfg.
+			WithDBName(p.cfg.TBLS.DBName).
+			DSN()
+	}
+
+	db, err := dbtool.OpenDB(dsn)
+	if err != nil {
+		return fmt.Errorf("open db: %w", err)
+	}
+
+	for _, schema := range p.cfg.TBLS.GetSchemas() {
+		if err = dbtool.CreateSchemaIfNoExist(db, schema); err != nil {
+			return fmt.Errorf("create schema: %w", err)
+		}
 	}
 
 	return nil

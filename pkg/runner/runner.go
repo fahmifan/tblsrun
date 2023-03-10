@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -13,8 +14,10 @@ type DbDriver interface {
 	Init() error
 	CreateDB() error
 	CreateSchema() error
+	CreateSchemas() error
 	DSN() string
 	Stop() error
+	WithSchema(schema string) DbDriver
 }
 
 type DbMigrator func(dsn, migrationDir string) error
@@ -62,16 +65,42 @@ func (r *Runner) run() error {
 		return fmt.Errorf("create db: %w", err)
 	}
 
-	if err := r.dbDriver.CreateSchema(); err != nil {
-		return fmt.Errorf("create schema: %w", err)
+	if err := r.dbDriver.CreateSchemas(); err != nil {
+		return fmt.Errorf("create schemas: %w", err)
 	}
 
-	if err := r.migrateDB(r.dbDriver.DSN(), r.cfg.TBLS.MigrationDir); err != nil {
-		return fmt.Errorf("migrate db: %w", err)
+	schemas := r.cfg.TBLS.GetSchemas()
+	migrationDirs := r.cfg.TBLS.GetMigrationDirs()
+	cfgFiles := r.cfg.TBLS.GetConfigFiles()
+
+	if len(schemas) != len(migrationDirs) {
+		return errors.New("migration dir and schema length must be equal")
 	}
 
-	if err := generateDoc(r.dbDriver.DSN(), r.cfg.TBLS.CfgFile, os.Stdout); err != nil {
-		return fmt.Errorf("generate doc: %w", err)
+	configPairs := make([]struct {
+		Schema       string
+		MigrationDir string
+		CfgFile      string
+	}, len(migrationDirs))
+
+	for i := 0; i < len(migrationDirs); i++ {
+		configPairs[i].Schema = schemas[i]
+		configPairs[i].MigrationDir = migrationDirs[i]
+		configPairs[i].CfgFile = cfgFiles[i]
+	}
+
+	for _, pair := range configPairs {
+		dsn := r.dbDriver.WithSchema(pair.Schema).DSN()
+		if err := r.migrateDB(dsn, pair.MigrationDir); err != nil {
+			return fmt.Errorf("migrate db: %w", err)
+		}
+	}
+
+	for _, cfgPair := range configPairs {
+		dsn := r.dbDriver.WithSchema(cfgPair.Schema).DSN()
+		if err := generateDoc(dsn, cfgPair.CfgFile, os.Stdout); err != nil {
+			return fmt.Errorf("generate doc: %w", err)
+		}
 	}
 
 	return nil

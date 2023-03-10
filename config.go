@@ -3,6 +3,7 @@ package tblsrun
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	_ "github.com/davecgh/go-spew/spew"
 	"github.com/joeshaw/envdecode"
@@ -34,6 +35,21 @@ type TBLS struct {
 	Schema       string `env:"TBLS_DATABASE_SCHEMA"`
 	MigrationDir string `env:"TBLS_MIGRATION_DIR"`
 	CfgFile      string `env:"TBLS_CONFIG_FILE,default=.tbls.yml"`
+}
+
+func (tbls TBLS) GetMigrationDirs() []string {
+	return strings.Split(tbls.MigrationDir, ",")
+}
+
+func (tbls TBLS) GetSchemas() (schemas []string) {
+	for _, schema := range strings.Split(tbls.Schema, ",") {
+		schemas = append(schemas, strings.TrimSpace(schema))
+	}
+	return schemas
+}
+
+func (tbls TBLS) GetConfigFiles() []string {
+	return strings.Split(tbls.CfgFile, ",")
 }
 
 func (db Database) DSN() string {
