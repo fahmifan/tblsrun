@@ -99,8 +99,6 @@ func (r *Runner) run() error {
 	if err := generateDoc(dsn, r.cfg.TBLS.CfgFile, os.Stdout); err != nil {
 		return fmt.Errorf("generate doc: %w", err)
 	}
-	// for _, cfgPair := range configPairs {
-	// }
 
 	return nil
 }
