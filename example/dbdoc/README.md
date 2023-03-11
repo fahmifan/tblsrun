@@ -4,9 +4,12 @@
 
 | Name | Columns | Comment | Type |
 | ---- | ------- | ------- | ---- |
-| [example_schema.schema_migrations](example_schema.schema_migrations.md) | 2 |  | BASE TABLE |
-| [example_schema.example](example_schema.example.md) | 2 |  | BASE TABLE |
-| [example_schema.example_2](example_schema.example_2.md) | 3 |  | BASE TABLE |
+| [bar.schema_migrations](bar.schema_migrations.md) | 2 |  | BASE TABLE |
+| [bar.example](bar.example.md) | 2 |  | BASE TABLE |
+| [bar.example_2](bar.example_2.md) | 3 |  | BASE TABLE |
+| [foo.schema_migrations](foo.schema_migrations.md) | 2 |  | BASE TABLE |
+| [foo.example](foo.example.md) | 3 |  | BASE TABLE |
+| [foo.example_2](foo.example_2.md) | 3 |  | BASE TABLE |
 
 ## Relations
 

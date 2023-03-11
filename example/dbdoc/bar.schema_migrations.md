@@ -1,4 +1,4 @@
-# example_schema.schema_migrations
+# bar.schema_migrations
 
 ## Description
 
@@ -19,11 +19,11 @@
 
 | Name | Definition |
 | ---- | ---------- |
-| schema_migrations_pkey | CREATE UNIQUE INDEX schema_migrations_pkey ON example_schema.schema_migrations USING btree (version) |
+| schema_migrations_pkey | CREATE UNIQUE INDEX schema_migrations_pkey ON bar.schema_migrations USING btree (version) |
 
 ## Relations
 
-![er](example_schema.schema_migrations.svg)
+![er](bar.schema_migrations.svg)
 
 ---
 

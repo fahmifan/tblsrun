@@ -41,6 +41,19 @@ func (pd *PostgresDocker) DSN() string {
 		DSN()
 }
 
+func (pd *PostgresDocker) DSNWithoutSchema() string {
+	return pd.dbCfg.
+		WithDBName(pd.cfg.TBLS.DBName).
+		DSNWithoutSchema()
+}
+
+func (pd *PostgresDocker) WithSchema(schema string) runner.DbDriver {
+	newP := *pd
+
+	newP.cfg.TBLS.Schema = schema
+	return &newP
+}
+
 func (pd *PostgresDocker) Stop() error {
 	return pd.pool.Purge(pd.resource)
 }
@@ -137,6 +150,29 @@ func (pd *PostgresDocker) CreateSchema() error {
 		if err = dbtool.CreateSchemaIfNoExist(db, pd.cfg.TBLS.Schema); err != nil {
 			return fmt.Errorf("create schema: %w", err)
 		}
+	}
+
+	return nil
+}
+
+func (p *PostgresDocker) CreateSchemas() error {
+	dsn := p.dbCfg.DSN()
+	if !p.isDefaultDB() {
+		dsn = p.dbCfg.
+			WithDBName(p.cfg.TBLS.DBName).
+			DSN()
+	}
+
+	db, err := dbtool.OpenDB(dsn)
+	if err != nil {
+		return fmt.Errorf("open db: %w", err)
+	}
+
+	for _, schema := range p.cfg.TBLS.GetSchemas() {
+		if err = dbtool.CreateSchemaIfNoExist(db, schema); err != nil {
+			return fmt.Errorf("create schema: %w", err)
+		}
+		fmt.Println("created schema", schema)
 	}
 
 	return nil

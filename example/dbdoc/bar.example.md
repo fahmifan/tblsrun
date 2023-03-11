@@ -1,4 +1,4 @@
-# example_schema.example
+# bar.example
 
 ## Description
 
@@ -6,7 +6,7 @@
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | integer | nextval('example_id_seq'::regclass) | false | [example_schema.example_2](example_schema.example_2.md) |  |  |
+| id | integer | nextval('bar.example_id_seq'::regclass) | false | [bar.example_2](bar.example_2.md) [foo.example](foo.example.md) |  |  |
 | name | varchar(255) |  | false |  |  |  |
 
 ## Constraints
@@ -19,11 +19,11 @@
 
 | Name | Definition |
 | ---- | ---------- |
-| example_pkey | CREATE UNIQUE INDEX example_pkey ON example_schema.example USING btree (id) |
+| example_pkey | CREATE UNIQUE INDEX example_pkey ON bar.example USING btree (id) |
 
 ## Relations
 
-![er](example_schema.example.svg)
+![er](bar.example.svg)
 
 ---
 

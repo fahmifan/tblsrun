@@ -1,4 +1,4 @@
-# example2_schema.example_2
+# foo.example_2
 
 ## Description
 
@@ -6,26 +6,26 @@
 
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
-| id | integer | nextval('example_2_id_seq'::regclass) | false |  |  |  |
+| id | integer | nextval('foo.example_2_id_seq'::regclass) | false |  |  |  |
 | name | varchar(255) |  | false |  |  |  |
-| example_1_id | integer |  | false |  | [example2_schema.example](example2_schema.example.md) |  |
+| example_1_id | integer |  | false |  | [foo.example](foo.example.md) |  |
 
 ## Constraints
 
 | Name | Type | Definition |
 | ---- | ---- | ---------- |
-| example_2_example_1_id_fkey | FOREIGN KEY | FOREIGN KEY (example_1_id) REFERENCES example(id) |
+| example_2_example_1_id_fkey | FOREIGN KEY | FOREIGN KEY (example_1_id) REFERENCES foo.example(id) |
 | example_2_pkey | PRIMARY KEY | PRIMARY KEY (id) |
 
 ## Indexes
 
 | Name | Definition |
 | ---- | ---------- |
-| example_2_pkey | CREATE UNIQUE INDEX example_2_pkey ON example2_schema.example_2 USING btree (id) |
+| example_2_pkey | CREATE UNIQUE INDEX example_2_pkey ON foo.example_2 USING btree (id) |
 
 ## Relations
 
-![er](example2_schema.example_2.svg)
+![er](foo.example_2.svg)
 
 ---
 
