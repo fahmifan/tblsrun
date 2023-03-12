@@ -7,7 +7,7 @@
 | Name | Type | Default | Nullable | Children | Parents | Comment |
 | ---- | ---- | ------- | -------- | -------- | ------- | ------- |
 | id | integer | nextval('foo.example_id_seq'::regclass) | false | [foo.example_2](foo.example_2.md) |  |  |
-| example_schema_id | integer |  | false |  | [bar.example](bar.example.md) |  |
+| example_schema_id | integer |  | false |  |  |  |
 | name | varchar(255) |  | false |  |  |  |
 
 ## Constraints

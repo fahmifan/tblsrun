@@ -43,6 +43,23 @@ go install github.com/fahmifan/tblsrun/cmd/tblsrun@latest
 - `TBLS_CONFIG_FILE`
   - the path to your `tbls` config file
 
+### Multiple migrations folder & schemas
+- One use case for this is when you have multiple schemas in your database with separate migrations folder, and you want to generate the doc for each schema. To enable this, you can set the `TBLS_DATABASE_SCHEMA` to `schema_1,schema_2,schema_n`, and the `TBLS_MIGRATION_DIR` to `dir_1,dir_2,dir_n`. 
+ 
+If we want to generate it into different folder, we need to have multiple `.tbls.yml` & `.env` files, example to configure this:
+```yml
+# schema_1.tbls.yml
+docPath: example/dbdoc/bar
+
+# schema_2.tbls.yml
+docPath: example/dbdoc/foo
+```
+
+Then we will run for each config file:
+```
+
+```
+
 ### Available Commands
 ```
 Generate database documentation from migration files
