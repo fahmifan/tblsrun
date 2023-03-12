@@ -10,7 +10,7 @@ Currently it only support `postgres` for the DB & [golang-migrate](https://githu
 
 ## Example Database
 
-Here is the example database documentation [link](/example/dbdoc/README.md)
+Here is the example database documentation [link](/example/dbdoc/foo/README.md)
 
 ### Snippets
 
@@ -42,6 +42,22 @@ go install github.com/fahmifan/tblsrun/cmd/tblsrun@latest
   - currently only support `golang-migrate` format
 - `TBLS_CONFIG_FILE`
   - the path to your `tbls` config file
+
+### Multiple migrations folder & schemas
+One use case for this is when you have multiple schemas in your database with separate migrations folder, and you want to generate the doc for each schema. 
+
+To enable this, you need to set the `TBLS_DATABASE_SCHEMA` to `schema_1,schema_2,schema_n`, and the `TBLS_MIGRATION_DIR` to `dir_1,dir_2,dir_n`. 
+ 
+If we want to generate it into different folder, we need to have multiple `.tbls.yml` & `.env` files, example to configure this:
+```yml
+# schema_1.tbls.yml
+docPath: example/dbdoc/bar
+
+# schema_2.tbls.yml
+docPath: example/dbdoc/foo
+```
+
+Check [example](/example/README.md) for more details.
 
 ### Available Commands
 ```

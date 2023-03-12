@@ -1,5 +1,4 @@
 # Path to generate document
-docPath: example/dbdoc
+docPath: dbdoc/bar
 include:
-  - foo.*
   - bar.*
