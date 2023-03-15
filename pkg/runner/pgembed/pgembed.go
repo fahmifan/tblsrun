@@ -51,6 +51,13 @@ func (p *PostgresEmbedded) WithSchema(schema string) runner.DbDriver {
 	return &newP
 }
 
+func (p *PostgresEmbedded) WithDBCfg(dbCfg tblsrun.Database) runner.DbDriver {
+	newP := *p
+
+	newP.dbCfg = dbCfg
+	return &newP
+}
+
 func (p *PostgresEmbedded) Stop() error {
 	return p.pg.Stop()
 }
@@ -120,11 +127,11 @@ func (p *PostgresEmbedded) CreateSchema() error {
 }
 
 func (p *PostgresEmbedded) CreateSchemas() error {
-	dsn := p.dbCfg.DSN()
+	dsn := p.dbCfg.DSNWithoutSchema()
 	if !p.isDefaultDB() {
 		dsn = p.dbCfg.
 			WithDBName(p.cfg.TBLS.DBName).
-			DSN()
+			DSNWithoutSchema()
 	}
 
 	db, err := dbtool.OpenDB(dsn)

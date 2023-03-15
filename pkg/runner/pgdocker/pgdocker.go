@@ -47,6 +47,13 @@ func (pd *PostgresDocker) DSNWithoutSchema() string {
 		DSNWithoutSchema()
 }
 
+func (pd *PostgresDocker) WithDBCfg(dbCfg tblsrun.Database) runner.DbDriver {
+	newP := *pd
+
+	newP.dbCfg = dbCfg
+	return &newP
+}
+
 func (pd *PostgresDocker) WithSchema(schema string) runner.DbDriver {
 	newP := *pd
 
@@ -156,11 +163,11 @@ func (pd *PostgresDocker) CreateSchema() error {
 }
 
 func (p *PostgresDocker) CreateSchemas() error {
-	dsn := p.dbCfg.DSN()
+	dsn := p.dbCfg.DSNWithoutSchema()
 	if !p.isDefaultDB() {
 		dsn = p.dbCfg.
 			WithDBName(p.cfg.TBLS.DBName).
-			DSN()
+			DSNWithoutSchema()
 	}
 
 	db, err := dbtool.OpenDB(dsn)

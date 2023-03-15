@@ -19,6 +19,7 @@ type DbDriver interface {
 	DSNWithoutSchema() string
 	Stop() error
 	WithSchema(schema string) DbDriver
+	WithDBCfg(dbCfg tblsrun.Database) DbDriver
 }
 
 type DbMigrator func(dsn, migrationDir string) error
